@@ -216,14 +216,16 @@ class DoublyLinkedList {
      * @return \DLList\Node
      */
     protected function insertAfter($listNode, $newNode) { 
-        
-        $newNode->setNext($listNode->getNext());
-        $newNode->setPrevious($listNode);
-        if ($newNode->getNext() === NULL) {
+        $next = $listNode->getNext();
+        if (!$next) {
             $this->_tail = $newNode;
-        }
-        $this->_count++;
-        
+        } else {
+            $next->setPrevious($newNode);
+        }        
+        $newNode->setNext($next);
+        $newNode->setPrevious($listNode);
+        $listNode->setNext($newNode);
+        $this->_count++;        
         return $newNode;
     }
     
@@ -234,22 +236,23 @@ class DoublyLinkedList {
      * @return \DLList\Node
      */
     protected function insertBefore($listNode, $newNode) {
-        
-        $newNode->setPrevious($listNode->getPrevious());
-        $newNode->setNext($listNode);
-        if ($newNode->getPrevious() === NULL) {
+        $previous = $listNode->getPrevious();
+        if (!$previous) {
             $this->_head = $newNode;
-        }  
-        $this->_count++;
-        
+        } else {
+            $previous->setNext($newNode);
+        }
+        $newNode->setPrevious($previous);
+        $newNode->setNext($listNode);
+        $listNode->setPrevious($newNode);
+        $this->_count++;        
         return $newNode;
     }
     
     /**
      * Inserts New Node object into an empty List or resets the list with 
      * the single element if so desired.
-     * @param type $listNode
-     * @param type $newNode
+     * @param \DLList\Node $newNode
      * @return \DLList\Node
      */
     protected function insertEmpty($newNode) {
@@ -263,23 +266,24 @@ class DoublyLinkedList {
     
     /**
      * Inserts New Node object before the given List Node in the List
-     * @param type $listNode
-     * @param type $newNode
+     * @param \DLList\Node $newNode
      * @return \DLList\Node
      */
     protected function insertNode($newNode) {
         // Assumes List has been check for empty list!
         $currentNode = $this->_head;
+        $set = false;
         while ($currentNode != NULL) {
-            if ($currentNode->getData() > $newNode->getData() && $currentNode->getNext() != NULL) {
-                $currentNode = $currentNode->getNext();
-            } elseif ($currentNode->getData() > $newNode->getData()) {
-                $newNode = $this->insertAfter($currentNode, $newNode);
-                $currentNode = NULL;
-            } elseif ($currentNode->getData() <= $newNode->getData()) {
+            if ($currentNode->getData() > $newNode->getData()) {
                 $newNode = $this->insertBefore($currentNode, $newNode);
                 $currentNode = NULL;
+                $set = true;
+            } else {
+                $currentNode = $currentNode->getNext();
             }
+        }
+        if (!$set) {
+            $newNode = $this->insertAfter($this->last(), $newNode);
         }
         
         return $newNode;
