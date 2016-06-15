@@ -1,0 +1,26 @@
+{
+    "name": "woody1ks/php-doublylinkedlist",
+    "description": "Handbid PHP Travel Pledge Library",
+    "type": "php-library",
+    "keywords": ["php", "library", "doubly","linked","list"],
+    "version": "0.0.1",
+    "dist": {
+        "url": "git@github.com:woody1ks/php-doublylinkedlist.git",
+        "type": "git"
+    },
+    "license": "GNU Public",
+    "authors": [
+        {
+            "name": "Woody Whitman",
+            "email": "woody@handbid.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DLList\\": "lib/"
+        }
+    }
+}
